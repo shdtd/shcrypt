@@ -15,9 +15,9 @@ import (
 )
 
 type shResource struct {
-	source     *string
-	out        *string
-	passphrase *string
+	source     string
+	out        string
+	passphrase string
 	padding    int
 	Type       string
 	Block      cipher.Block
@@ -25,14 +25,14 @@ type shResource struct {
 }
 
 func (r shResource) GetSource() string {
-	return *r.source
+	return r.source
 }
 
 func (r shResource) GetOut() string {
-	return *r.out
+	return r.out
 }
 
-func NewShResource(source *string, out *string, passphrase *string) (*shResource, error) {
+func NewShResource(source string, out string, passphrase string) (*shResource, error) {
 	res := &shResource{}
 	res.source = source
 	res.out = out
@@ -47,7 +47,7 @@ func NewShResource(source *string, out *string, passphrase *string) (*shResource
 }
 
 func (res *shResource) readFiles() error {
-	keyFile, err := filepath.Abs(*res.passphrase)
+	keyFile, err := filepath.Abs(res.passphrase)
 	if err != nil {
 		log.Fatalf("Absolute path for key not found: %s", err)
 		return err
@@ -63,11 +63,11 @@ func (res *shResource) readFiles() error {
 	key := b32[:]
 	res.Block, err = aes.NewCipher(key)
 	if err != nil {
-		log.Fatal("Error on aes.NewCipher: %s", err)
+		log.Fatalf("Error on aes.NewCipher: %s", err)
 		return err
 	}
 
-	inputFile, err := filepath.Abs(*res.source)
+	inputFile, err := filepath.Abs(res.source)
 	if err != nil {
 		log.Fatalf("Absolute path for file not found: %s", err)
 		return err

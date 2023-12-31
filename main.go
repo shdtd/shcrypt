@@ -10,33 +10,33 @@ import (
 )
 
 func main() {
-	// Setting commands and program arguments.
-	// Setting "encrypt" command.
-	encrypt := flag.NewFlagSet("encrypt", flag.ExitOnError)
-	file_for_encrypt := encrypt.String("file", "", "file")
-	passphrase_file_on_encrypt := encrypt.String("key", "", "key")
-	out_for_encrypt := encrypt.String("out", "", "out")
-	// Setting "decrypt" command.
-	decrypt := flag.NewFlagSet("decrypt", flag.ExitOnError)
-	file_for_decrypt := decrypt.String("file", "", "file")
-	passphrase_file_on_decrypt := decrypt.String("key", "", "key")
-	out_for_decrypt := decrypt.String("out", "", "out")
+	// Setting commands and program arguments
+	// Setting "encrypt" command
+	encryptCmd := flag.NewFlagSet("encrypt", flag.ExitOnError)
+	fileForEncrypt := encryptCmd.String("file", "", "file")
+	passphraseFileOnEncrypt := encryptCmd.String("key", "", "key")
+	outForEncrypt := encryptCmd.String("out", "", "out")
+	// Setting "decrypt" command
+	decryptCmd := flag.NewFlagSet("decrypt", flag.ExitOnError)
+	fileForDecrypt := decryptCmd.String("file", "", "file")
+	passphraseFileOnDecrypt := decryptCmd.String("key", "", "key")
+	outForDecrypt := decryptCmd.String("out", "", "out")
 
-	// If the program is run without arguments, the GUI will be displayed.
+	// If the program is run without arguments, the GUI will be displayed
 	if len(os.Args) < 2 {
 		shgui.Run()
 		os.Exit(0)
 	}
-	// Loop through all arguments.
+	// Loop through all arguments
 	switch os.Args[1] {
-	// Handling the "encrypt" command.
+	// Handling the "encrypt" command
 	case "encrypt":
 		// Parsing the encryption command arguments
-		encrypt.Parse(os.Args[2:])
+		encryptCmd.Parse(os.Args[2:])
 		// Encryption
-		res, err := shresource.NewShResource(file_for_encrypt,
-			out_for_encrypt,
-			passphrase_file_on_encrypt)
+		res, err := shresource.NewShResource(*fileForEncrypt,
+			*outForEncrypt,
+			*passphraseFileOnEncrypt)
 		if err != nil {
 			fmt.Println("Get resources returned an error:", err)
 			os.Exit(0)
@@ -50,14 +50,14 @@ func main() {
 		}
 		// Write encrypted data to file
 		res.FileSafe()
-	// Handling the "decrypt" command.
+	// Handling the "decrypt" command
 	case "decrypt":
 		// Parsing the decryption command arguments
-		decrypt.Parse(os.Args[2:])
+		decryptCmd.Parse(os.Args[2:])
 		// Decryption
-		res, err := shresource.NewShResource(file_for_decrypt,
-			out_for_decrypt,
-			passphrase_file_on_decrypt)
+		res, err := shresource.NewShResource(*fileForDecrypt,
+			*outForDecrypt,
+			*passphraseFileOnDecrypt)
 		if err != nil {
 			fmt.Println("Get resources returned an error:", err)
 			os.Exit(0)
@@ -71,13 +71,13 @@ func main() {
 		}
 		// Write decrypted data to file
 		res.FileSafe()
-	// By default, displays help information and exits the program.
+	// By default, displays help information and exits the program
 	default:
 		doHelp()
 	}
 }
 
-// The function displays help information and exits the program.
+// The function displays help information and exits the program
 func doHelp() {
 	fmt.Println("Expected 'encrypt' or 'decrypt' command")
 	fmt.Println("Example:")
